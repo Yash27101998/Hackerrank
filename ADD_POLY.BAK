@@ -1,0 +1,106 @@
+#include<stdio.h>
+#include<conio.h>
+#include<malloc.h>
+#include<process.h>
+struct poly
+{
+int coe;
+int exp;
+struct poly*next;
+};
+void append(struct poly**,int,int);
+void display(struct poly*);
+void add(struct poly*,struct poly*,struct poly**);
+void main()
+{
+clrscr();
+struct poly*first,*second,*third;
+first=second=third=NULL;
+append(&first,2,1);
+append(&first,5,3);
+append(&first,3,4);
+append(&first,10,6);
+append(&second,10,2);
+append(&second,3,4);
+append(&second,5,5);
+append(&second,3,6);
+append(&second,5,10);
+add(first,second,&third);
+//display(first);
+//display(second);
+display(third);
+getch();
+}
+void append(struct poly**ps,int x,int y)
+{
+struct poly *p;
+struct poly *temp=*ps;
+p=(struct poly*)malloc(sizeof(struct poly));
+p->coe=x;
+p->exp=y;
+p->next=NULL;
+if(*ps==NULL)
+{
+*ps=p;
+return;
+}
+while(temp->next!=NULL)
+{
+temp=temp->next;
+}
+temp->next=p;
+}
+void display(struct poly*ps)
+{
+
+ while(ps!=NULL)
+ {
+ printf("The element is %d ->\n",ps->coe);
+ printf("The element is %d ->\n",ps->exp);
+ ps=ps->next;
+ }
+}
+void add(struct poly*f,struct poly*s,struct poly**t)
+{
+struct poly*p;
+if(f==NULL&&s==NULL)
+{
+printf("Addition cannot be done\n");
+return;
+}
+while(f!=NULL||s!=NULL)
+{
+p=(struct poly*)malloc(sizeof(struct poly));
+if(f->exp==s->exp)
+{
+append(&p,(f->coe)+(s->coe),f->exp);
+//p->exp=f->exp;
+//p->coe=f->coe+s->coe;
+f=f->next;
+s=s->next;
+}
+else if(f->exp<s->exp)
+{
+append(&p,f->coe,f->exp);
+//p->exp=f->exp;
+//p->coe=f->coe;
+f=f->next;
+}
+else
+{
+append(&p,s->coe,s->exp);
+//p->exp=s->exp;
+//p->coe=s->coe;
+s=s->next;
+}
+if(*t==NULL)
+{
+*t=p;
+}
+}
+while(s!=NULL)
+{
+ append(&p,s->coe,s->exp);
+ s=s->next;
+}
+}
